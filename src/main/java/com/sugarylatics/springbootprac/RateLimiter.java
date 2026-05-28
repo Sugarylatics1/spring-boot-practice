@@ -1,8 +1,7 @@
 package com.sugarylatics.springbootprac;
 
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.Deque;
-import java.util.ArrayDeque;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Component;
@@ -14,6 +13,7 @@ public class RateLimiter {
     private final ConcurrentHashMap<String, Deque<Long>> windows = new ConcurrentHashMap<>();
     private final AtomicLong totalRequests = new AtomicLong();
     private final AtomicLong rateLimitedRequests = new AtomicLong();
+    private final List<Long> recentLatencies = Collections.synchronizedList(new ArrayList<>());
 
     public boolean isAllowed(String ip) {
         totalRequests.incrementAndGet();
@@ -34,4 +34,18 @@ public class RateLimiter {
     public int getActiveIpCount() { return windows.size();}
     public long getTotalRequests() { return totalRequests.get();}
     public long getRateLimitedRequests() { return rateLimitedRequests.get();}
+
+    public void recordLatency(long latencyMs) {
+        recentLatencies.add(latencyMs);
+        if (recentLatencies.size() > 1000) recentLatencies.remove(0);
+    }
+
+    public long getP95Latency() {
+        if(recentLatencies.isEmpty()) return 0;
+        List<Long> sorted = new ArrayList<>(recentLatencies);
+        Collections.sort(sorted);
+        int idx = (int) (sorted.size() * 0.95);
+        return sorted.get(idx);
+    }
+
 }

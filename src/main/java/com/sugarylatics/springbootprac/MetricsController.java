@@ -24,6 +24,10 @@ public class MetricsController  {
 
                 "# HELP rate_limit_hits Total rate-limited requests\n" +
                 "# TYPE rate_limit_hits counter\n" +
-                "rate_limit_hits "+ rateLimiter.getRateLimitedRequests() +"\n";
+                "rate_limit_hits "+ rateLimiter.getRateLimitedRequests() +"\n" +
+
+                "# HELP request_latency_p95_us 95th percentile request latency in microseconds\n" +
+                "# TYPE request_latency_p95_us gauge\n" +
+                "request_latency_p95_us "+ rateLimiter.getP95Latency() +"\n" ;
     }
 }
