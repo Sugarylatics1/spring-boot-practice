@@ -12,6 +12,7 @@ public class MetricsController  {
     public MetricsController(RateLimiter rateLimiter) {
         this.rateLimiter = rateLimiter;
     }
+
     @GetMapping (value = "/metrics", produces = MediaType.TEXT_PLAIN_VALUE)
     public String getMetrics(){
         return "# HELP requests_total Total number of requests\n" +
