@@ -60,7 +60,7 @@ function App() {
     const testPing = async () => {
         try {
             await fetch('/ping', {
-                headers: { 'Authorization': 'nexus_7fa94376-75b4-4bf8-80d1-6a01e455ffd0' }
+                headers: { 'Authorization': 'nexus_adedd49a-b0af-462c-999a-1fbccff5fe4f' }
             })
             // Refresh metrics after ping
             setTimeout(fetchMetrics, 500)
